@@ -1,6 +1,6 @@
 /* Constants */ 
 
-const GRID_SIZE         = 3;
+const GRID_SIZE         = 10;
 const FPS               = 3;
 const FRAMES_PER_ACTION = 3;
 const INITIAL_HEALTH    = 100;
@@ -397,6 +397,13 @@ function resetCanvas() {
     context.restore();
 }
 
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
 function playFrame() {
     if (framesCount % FRAMES_PER_ACTION == FRAMES_PER_ACTION - 1) {
         let char;
@@ -412,8 +419,16 @@ function playFrame() {
         const alive = characters.length;
     
         if (alive > 1) {
+
+            let indexes = [];
+            for (let i = 0; i < characters.length; i++) {
+                indexes.push(i);
+            }
+            shuffleArray(indexes);
+
             let others;
-            for (let character of characters) {     
+            for (let index of indexes) {
+                const character = characters[index]     
                 others = characters
                     .filter(char => char.name !== character.name); 
                 character.execute(others);
